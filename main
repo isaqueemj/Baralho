@@ -1,76 +1,63 @@
 from itertools import product
 from random import randint
 
-
 class Baralho:
-    def __init__(self) -> None:
+    def __init__(self):
         self.cartas = []
         self.naipes = None
         self.numeros = []
-        self.baralho = []
         self.cartas_escolhidas = set()
-        self.mao_partida = [None] * 3
-        self.mao_partida_oponente = [None] * 3
+        self.mao_partida = [None] * 9
+        self.mao_partida_oponente = [None] * 9
         self.vira_da_mesa = [None] * 1
-        self.quantidade_cartas = range(3)
-        self.carta_aleatoria = None
 
     def define_cartas_possiveis(self):
         self.naipes = {
             '♦️': 'Ouro',
             '♠️': 'Espada',
             '♥️': 'Copa',
-            '♣️': 'Gato'
+            '♣️': 'Paus'
         }
-        self.numeros = ['4', '5', '6', '7', 'Q', 'J', 'k', 'A', '2', '3']
+        self.numeros = ['4', '5', '6', '7', '8', '9', '10', 'Q', 'J', 'K', 'A', '2', '3']
 
     def permuta_todas_cartas(self):
         self.cartas = list(product(self.numeros, self.naipes.keys()))
 
     def define_mao(self):
-        for i in self.quantidade_cartas:
-            self.carta_aleatoria = randint(0, 40)
-            if self.carta_aleatoria not in self.cartas_escolhidas:
-                self.cartas_escolhidas.add(self.cartas[self.carta_aleatoria])
-                self.mao_partida[i] = (self.cartas[self.carta_aleatoria])
-            else:
-                self.quantidade_cartas -= 1
+        for i in range(9):
+            self.carta_aleatoria = randint(0, len(self.cartas) - 1)
+            while self.cartas[self.carta_aleatoria] in self.cartas_escolhidas:
+                self.carta_aleatoria = randint(0, len(self.cartas) - 1)
+            self.cartas_escolhidas.add(self.cartas[self.carta_aleatoria])
+            self.mao_partida[i] = self.cartas[self.carta_aleatoria]
 
-        for i in self.quantidade_cartas:
-            self.carta_aleatoria = randint(0, 40)
-            if self.carta_aleatoria not in self.cartas_escolhidas:
-                self.cartas_escolhidas.add(self.cartas[self.carta_aleatoria])
-                self.mao_partida_oponente[i] = (self.cartas[self.carta_aleatoria])
-            else:
-                self.quantidade_cartas -= 1
+        for i in range(9):
+            self.carta_aleatoria = randint(0, len(self.cartas) - 1)
+            while self.cartas[self.carta_aleatoria] in self.cartas_escolhidas:
+                self.carta_aleatoria = randint(0, len(self.cartas) - 1)
+            self.cartas_escolhidas.add(self.cartas[self.carta_aleatoria])
+            self.mao_partida_oponente[i] = self.cartas[self.carta_aleatoria]
 
     def define_o_vira(self):
-        self.quantidade_cartas = range(1)
-        for i in self.quantidade_cartas:
-            self.carta_aleatoria = randint(0, 40)
-            if self.carta_aleatoria not in self.cartas_escolhidas:
-                self.cartas_escolhidas.add(self.cartas[self.carta_aleatoria])
-                self.vira_da_mesa[i] = (self.cartas[self.carta_aleatoria])
-            else:
-                self.quantidade_cartas -= 1
+        self.carta_aleatoria = randint(0, len(self.cartas) - 1)
+        while self.cartas[self.carta_aleatoria] in self.cartas_escolhidas:
+            self.carta_aleatoria = randint(0, len(self.cartas) - 1)
+        self.cartas_escolhidas.add(self.cartas[self.carta_aleatoria])
+        self.vira_da_mesa[0] = self.cartas[self.carta_aleatoria]
 
     def mostra_mao(self):
         for carta in self.mao_partida:
-            valor = carta[0]
-            naipe = carta[1]
-            print(f'{valor} {naipe}', sep='\n')
-        print('\n')
+            valor, naipe = carta
+            print(f'{valor} {naipe}')
 
-        for carta in self.vira_da_mesa:
-            valor = carta[0]
-            naipe = carta[1]
-            print(f'{valor} {naipe}', sep='\n')
-        print('\n')
+        print('\nVirada:')
+        valor, naipe = self.vira_da_mesa[0]
+        print(f'{valor} {naipe}')
 
+        print('\nMão do Oponente:')
         for carta in self.mao_partida_oponente:
-            valor = carta[0]
-            naipe = carta[1]
-            print(f'{valor} {naipe}', sep='\n')
+            valor, naipe = carta
+            print(f'{valor} {naipe}')
 
 
 cartas = Baralho()
